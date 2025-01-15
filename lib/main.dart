@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:breweries/brewery_dto.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(const MyApp());
 
@@ -25,7 +27,6 @@ class BreweryWidget extends StatefulWidget {
 
 class BreweryWidgetState extends State<BreweryWidget> {
   final String apiUrl = 'https://api.openbrewerydb.org/v1/breweries';
-  final Dio _dio = Dio();
   List<BreweryDto> breweries = [];
   bool isLoading = true;
   String? error;
@@ -38,13 +39,20 @@ class BreweryWidgetState extends State<BreweryWidget> {
 
   Future<void> fetchBreweries() async {
     try {
-      final response = await _dio.get(apiUrl);
-      setState(() {
-        breweries = (response.data as List)
-            .map((json) => BreweryDto.fromJson(json))
-            .toList();
-        isLoading = false;
-      });
+      final response = await http.get(Uri.parse(apiUrl));
+      if (response.statusCode == 200) {
+        setState(() {
+          breweries = (json.decode(response.body) as List)
+              .map((json) => BreweryDto.fromJson(json))
+              .toList();
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          error = 'Failed to load breweries';
+          isLoading = false;
+        });
+      }
     } catch (e) {
       setState(() {
         error = 'Failed to load breweries';
