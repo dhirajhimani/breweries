@@ -11,8 +11,8 @@ class BreweryDto extends Equatable {
   final String? stateProvince;
   final String? postalCode;
   final String? country;
-  final String? longitude;
-  final String? latitude;
+  final double? longitude;
+  final double? latitude;
   final String? phone;
   final String? websiteUrl;
   final String? state;
@@ -49,8 +49,8 @@ class BreweryDto extends Equatable {
       stateProvince: json['state_province'] as String?,
       postalCode: json['postal_code'] as String?,
       country: json['country'] as String?,
-      longitude: json['longitude'] as String?,
-      latitude: json['latitude'] as String?,
+      longitude: json['longitude'] as double?,
+      latitude: json['latitude'] as double?,
       phone: json['phone'] as String?,
       websiteUrl: json['website_url'] as String?,
       state: json['state'] as String?,
